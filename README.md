@@ -20,13 +20,17 @@ the short version
 let jwt = JWT.Parse(token_string)
 
 // access header metadata
-print("type: \(jwt.header["typ"].string ?? "not_found"))
+print("type: \(jwt.header["typ"].string ?? "not_found")")
 
 // access payload claims
-print("path.to.element: \(jwt.payload["path"]["to"]["element"].string ?? "not_found"))
+print("path.to.element: \(jwt.payload["path"]["to"]["element"].string ?? "not_found")")
 
 // validate the signature
-if JWT.VerifyAuthenticity(of: token_string, withCert: certData, using: .rsaSignatureMessagePKCS1v15SHA256) {
+if JWT.VerifyAuthenticity(
+    of: token_string, 
+    withCert: certData, 
+    using: .rsaSignatureMessagePKCS1v15SHA256 ) {
+    
     print("token is valid")
 } else {
     print("token is not valid")
