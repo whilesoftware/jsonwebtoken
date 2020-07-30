@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         //.package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "4.0.0")
-        .package(url: "https://github.com/whilesoftware/SwiftyJSON.git", .revision("7080c04af17ca65802a2c4511f64fe12f851ed61"))
+        .package(url: "https://github.com/whilesoftware/SwiftyJSON.git", from: "5.0.0-patched")
     ],
     targets: [
         .target(
