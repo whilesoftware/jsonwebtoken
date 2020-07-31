@@ -1,5 +1,6 @@
 import Foundation
 import SwiftyJSON
+import Crypto
 
 public struct JWT {
     public let header:JSON
@@ -42,6 +43,39 @@ extension JWT {
      Credit to Jan Kaltoun for the approach found here
      https://blog.kaltoun.cz/verifying-rsa-jwt-signatures-in-swift/
      */
+    public static func VerifyAuthenticity(of token:String, withCert data:Data) -> Bool {
+        let parts = token.split(separator: ".")
+        guard parts.count == 3 else {
+            return false
+        }
+        
+        let value = "\(parts[0]).\(parts[1])"
+        let signature = String(parts[2])
+        
+        guard let valueData = value.data(using: .ascii) else {
+            return false
+        }
+        guard let signatureData = Data(base64Encoded: signature.base64FromBase64Url, options: .ignoreUnknownCharacters) else {
+            return false
+        }
+        
+        guard let rsaKey = try? RSAKey.public(certificate: data) else {
+            print("ERROR: failed to create RSA public key")
+            return false
+        }
+        
+        let rsa = RSA(algorithm: .sha256)
+        
+        do {
+            let result = try rsa.verify(signatureData, signs: valueData, key: rsaKey)
+            return result
+        } catch {
+            print("rsa verification failed")
+            print(error)
+            return false
+        }
+    }
+    /*
     public static func VerifyAuthenticity(of token:String, withCert data:Data, using algorithm: SecKeyAlgorithm) -> Bool {
         let parts = token.split(separator: ".")
         guard parts.count == 3 else {
@@ -66,6 +100,7 @@ extension JWT {
         
         return SecKeyVerifySignature(publicKey, algorithm, valueData, signatureData, nil)
     }
+    */
 }
 
 extension JWT {

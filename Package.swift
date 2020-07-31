@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "jsonwebtoken",
     platforms: [
-        .macOS(SupportedPlatform.MacOSVersion.v10_14)
+        .macOS(.v10_15)
     ],
     products: [
         .library(
@@ -13,13 +13,14 @@ let package = Package(
             targets: ["jsonwebtoken"]),
     ],
     dependencies: [
-        //.package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "4.0.0")
-        .package(url: "https://github.com/whilesoftware/SwiftyJSON.git", from: "5.0.1")
+        .package(url: "https://github.com/whilesoftware/SwiftyJSON.git", from: "5.0.1"),
+        .package(name: "Crypto", url: "https://github.com/vapor/open-crypto.git", from: "3.4.1"),
     ],
     targets: [
         .target(
             name: "jsonwebtoken",
             dependencies: [
+                "Crypto",
                 "SwiftyJSON"
             ]),
         .testTarget(
